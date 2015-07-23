@@ -53,11 +53,37 @@ We’re not going to give their names here, but check our website and you’ll s
 
 “That could be me!”
 
-Yes it could.
+Yes it could. Go ahead and try Email Popup by Optin Cat now.
 
+= Integrations =
+Email Popup by Optin Cat works with almost any email marketing provider, including MailChimp, GetResponse, Aweber, Campaign Monitor, Drip, Active Campaign, MailPoet, Constant Contact, iContact, Sign-Up.to and SendinBlue.
+
+= Troubleshooting Problems with Email Popup by Optin Cat =
+
+“Help! I need somebody” - The Beatles
+
+Has your experience with Email Popup by Optin Cat left you feeling like that lyric from the Fab Four?
+
+We’ve got you covered. Please check read through our support forum our our knowledgebase (please note that some of the features described in the knowledgebase only apply to the paid version of Email Popup by Optin Cat). If this doesn't help, please open a ticket in the support forum here.
+
+> #### Popupbs by Optin Cat Premium
+> Popups by Optin Cat Premium helps you get more email subscribers:<br />
+>
+> Lots Of Additional Beatiful Layout & Design Options.<br />
+> Smart Popup Targeting.<br />
+> Mobile popups.<br />
+> Two Step Optin Feature: Trigger a Popup Optin Form after the user clicks on a hyperlink.<br />
+> Priority Email Support.<br />
+> Content Upgrade Feature: Send optin baits & content upgrades straight from your WordPress backend.<br />
+> Exit Intervention: Display popups when the user is about to leave your site.<br />
+> Priority Email Support.<br />
+>
+> [Learn more about Popups by Optin Cat Premium >>](https://fatcatapps.com/optincat?utm_campaign=description%2Bcta&utm_source=https%3A%2F%2Fwordpress.org%2Fplugins%2FPopup%2F&utm_medium=referral)
+
+== Frequently Asked Questions ==
 We’ve got time to answer a few questions on Email Popup by Optin Cat. 
 
--- Question #1 on Email Popup by Optin Cat 
+= -- Question #1 on Email Popup by Optin Cat =
 
 “Who should use Email Popup by Optin Cat?”
 
@@ -65,7 +91,7 @@ Email Popup by Optin Cat is designed for you - the blogger, entrepreneur, or mar
 
 You’re also going to love Email Popup by Optin Cat if you’re a web designer creating sites for clients. In this case, you’ll love Email Popup by Optin Cat because it allows you to easily put a smart and effective system of popups on your client’s sites. You as a web designer do not have to waste precious coding time on deciphering a new popup plugin. We promise you that Email Popup by Optin Cat really will be easy for you to install on your client’s site(s).
 
--- Question #2 on Email Popup by Optin Cat 
+= -- Question #2 on Email Popup by Optin Cat =
 
 “Do I need coding skills to use Optin Cat?”
 
@@ -75,7 +101,7 @@ Just make sure that you can publish a blog post in WordPress. If you can do that
 
 And in the unlikely event that you do have trouble with Email Popup by Optin Cat, we’ll be there. We recognize that problems do “popup” (get it?). So we’ve built a fast, friendly support network around Email Popup by Optin Cat. Just contact us and we’ll help you to work through any difficulties you’re experiencing with Email Popup by Optin Cat.
 
--- Question #3 on Email Popup by Optin Cat 
+= -- Question #3 on Email Popup by Optin Cat =
 
 “Will Email Popup by Optin Cat Work for Me?”
 
@@ -87,7 +113,7 @@ First off, that would be kind of weird/creepy - especially for a WordPress plugi
 
 More importantly, though, we won’t make any pacts like that because we recognize that people may have different experiences with our popups plugin. If yours is one of the few that does differ, we’ll stand by your side providing whatever support you need.  
 
--- Question #4 on Email Popup by Optin Cat 
+= -- Question #4 on Email Popup by Optin Cat = 
 
 “Will Email Popup by Optin Cat slow down my website?”
 
@@ -95,14 +121,14 @@ No, Email Popup by Optin Cat is not built that way.
 
 We recognize that site load time is important to you for both conversion rates and SEO rankings. Knowing that, Email Popup by Optin Cat has been carefully built with performance in mind. You have enough to worry about after all. A popups plugin slowing down your website shouldn’t be one more headache.
 
--- Question #5 on Email Popup by Optin Cat 
+= -- Question #5 on Email Popup by Optin Cat =
 
 “Do the Popups in Email Popup by Optin Cat work on mobile?”
 
 Yes. The popups you can create with Email Popup by Optin Cat work on all devices.
 
 
--- Question #6 on Email Popup by Optin Cat 
+= -- Question #6 on Email Popup by Optin Cat =
 
 “How do I create and publish popups?”
 
@@ -120,13 +146,6 @@ Here’s how you create popups using our popups plugin.
 
 6. Deploy the popup and watch your subscriber list grow.
 
-= Troubleshooting Problems with Email Popup by Optin Cat =
-
-“Help! I need somebody” - The Beatles
-
-Has your experience with Email Popup by Optin Cat left you feeling like that lyric from the Fab Four?
-
-We’ve got you covered. Please check read through our support forum our our knowledgebase (please note that some of the features described in the knowledgebase only apply to the paid version of Email Popup by Optin Cat). If this doesn't help, please open a ticket in the support forum here.
 
 == Screenshots ==
 
