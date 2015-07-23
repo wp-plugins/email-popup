@@ -7,7 +7,7 @@ Author URI: https://fatcatapps.com/
 Plugin URI: https://fatcatapps.com/optincat
 Requires at least: 3.9.1
 Tested up to: 4.3
-Stable tag: 1.3.7
+Stable tag: 1.3.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,6 +163,9 @@ Ready to go? Here’s how you install Email Popup by Optin Cat:
 3. In your sidebar, select 'Optin Cat -> Add New' to create a new popup
 
 == Changelog ==
+
+= 1.3.7.1 =
+* Improved readme formatting
 
 = 1.3.7 =
 * Tiny fix: Ignore shortcode if the global $post is empty
