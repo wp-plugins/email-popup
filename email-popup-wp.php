@@ -4,7 +4,7 @@
     Plugin URI: https://fatcatapps.com/optincat
     Description: Email Popup By Optin Cat WordPress Lets You Convert More Blog Viisots Into Email Subscribers. Set It Up In 2 Minutes.
     Author: Fatcat Apps
-    Version: 1.3.7.1
+    Version: 1.3.7.2
     Author URI: https://fatcatapps.com/
 */
 
@@ -56,7 +56,7 @@ if ( ! class_exists ( 'Mobile_Detect' ) ) {
 if( ! class_exists( 'DhEasyOptIns' ) ) {
 class DhEasyOptIns {
 
-    var $ver = '1.3.7.1';
+    var $ver = '1.3.7.2';
     var $distro = '';
     var $shortcode = 'optin-cat';
     var $shortcode_aliases = array(

@@ -7,7 +7,7 @@ Author URI: https://fatcatapps.com/
 Plugin URI: https://fatcatapps.com/optincat
 Requires at least: 3.9.1
 Tested up to: 4.3
-Stable tag: 1.3.7.1
+Stable tag: 1.3.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,7 +66,7 @@ Has your experience with Email Popup by Optin Cat left you feeling like that lyr
 
 We’ve got you covered. Please check read through our support forum our our knowledgebase (please note that some of the features described in the knowledgebase only apply to the paid version of Email Popup by Optin Cat). If this doesn't help, please open a ticket in the support forum here.
 
-> #### Popupbs by Optin Cat Premium
+> #### Popups by Optin Cat Premium
 > Popups by Optin Cat Premium helps you get more email subscribers:<br />
 >
 > Lots Of Additional Beatiful Layout & Design Options.<br />
@@ -163,6 +163,9 @@ Ready to go? Here’s how you install Email Popup by Optin Cat:
 3. In your sidebar, select 'Optin Cat -> Add New' to create a new popup
 
 == Changelog ==
+
+= 1.3.7.2 =
+* Fixed spelling mistake
 
 = 1.3.7.1 =
 * Improved readme formatting
