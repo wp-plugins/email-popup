@@ -1,0 +1,75 @@
+.fca_eoi_lightbox_5 {
+	border: solid 1px transparent;
+	padding: 1em 1.5em !important;
+}
+.fca_eoi_lightbox_5_headline_copy_wrapper,
+.fca_eoi_lightbox_5_description_copy_wrapper,
+.fca_eoi_lightbox_5_privacy_copy_wrapper,
+.fca_eoi_lightbox_5_fatcatapps_link_wrapper{
+	text-align: center;
+}
+.fca_eoi_lightbox_5_headline_copy_wrapper{
+	line-height: 1.4 !important;
+	margin: .5em !important; 
+	padding: 0 !important;
+}
+.fca_eoi_lightbox_5_description_copy_wrapper,
+.fca_eoi_lightbox_5_privacy_copy_wrapper {
+	margin: 1em .5em !important;
+}
+.fca_eoi_lightbox_5_email_field_wrapper,
+.fca_eoi_lightbox_5_name_field_wrapper {
+	border: solid 1px transparent;
+	border-radius: 5px;
+	display: inline-block;
+	text-align: center;
+	padding: 0;
+	width: 49% ;
+}
+.fca_eoi_lightbox_5_email_field_wrapper {
+	@if $ltr {
+		float: right;
+	} @else {
+		float: left;
+	}
+}
+.fca_eoi_lightbox_5_no_name.fca_eoi_lightbox_5_email_field_wrapper {
+	float: none;
+	width: calc( 100% - 2px );
+}
+.fca_eoi_lightbox_5_email_field_wrapper input,
+.fca_eoi_lightbox_5_email_field_wrapper input:focus,
+.fca_eoi_lightbox_5_name_field_wrapper input:focus,
+.fca_eoi_lightbox_5_name_field_wrapper input {
+	background: none !important;
+	border: 0;
+	box-shadow: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: .25em 0;
+	padding: 0;
+	width: calc( 100% - 1em ) ;
+}
+.fca_eoi_lightbox_5_submit_button_wrapper {
+	border-bottom: solid 4px transparent;
+	border-radius: 5px;
+	padding: 0 !important;
+	text-align: center;
+	width: 100%;
+}
+.fca_eoi_lightbox_5_submit_button_wrapper input{
+	border: 0 !important;
+	border-radius: 5px;
+	font-weight: bold;
+	line-height: 3;
+	margin: 0;
+	height: 2.8em;
+	padding: 0;
+	text-shadow: 0 0 2px black;
+	white-space: normal;
+	width: 100%;
+}
+.fca_eoi_lightbox_5_fatcatapps_link_wrapper{
+	font-size: 12px;
+}
+::-webkit-input-placeholder{color:inherit;opacity:.7}:-moz-placeholder{color:inherit;opacity:.7}::-moz-placeholder{color:inherit;opacity:.7}:-ms-input-placeholder{color:inherit;opacity:.7}

@@ -1,0 +1,155 @@
+$content_large_padding: 20px;
+$content_small_padding_vertical: round( $content_large_padding / 2.5 );
+$content_small_padding_horizontal: round( $content_large_padding / 1.5 );
+$content_small_breakpoint: 450px;
+$content_tiny_breakpoint: 320px;
+
+@mixin fca_eoi_layout_inputs_wrapper( $withDelimiter ) {
+	@if $withDelimiter {
+		border-top: 1px solid #DBDBDB;
+		border-bottom: 1px solid #DBDBDB;
+		padding: $content_large_padding 0;
+
+		@media ( min-width: 1px ) and ( max-width: $content_small_breakpoint ),
+		       ( min-height: 1px ) and ( max-height: $content_small_breakpoint ) {
+			padding: $content_small_padding_vertical 0;
+		}
+
+		@media ( min-width: 1px ) and ( max-width: $content_tiny_breakpoint ),
+		       ( min-height: 1px ) and ( max-height: $content_tiny_breakpoint ) {
+			padding: 0;
+			border: none;
+		}
+	}
+
+	margin: $content_large_padding 0;
+
+	@media ( min-width: 1px ) and ( max-width: $content_small_breakpoint ),
+	       ( min-height: 1px ) and ( max-height: $content_small_breakpoint ) {
+		margin: $content_small_padding_vertical 0;
+	}
+}
+
+& {
+	display: inline-block;
+}
+
+&.fca_eoi_layout_widget {
+	max-width: 300px;
+}
+
+&.fca_eoi_layout_postbox {
+	max-width: 600px;
+}
+
+&.fca_eoi_layout_popup {
+	max-width: 650px;
+}
+
+&.fca_eoi_layout_widget div.fca_eoi_layout_field_wrapper {
+	float: none;
+	width: 100%;
+}
+
+div.fca_eoi_layout_content_wrapper {
+	margin: $content_large_padding;
+}
+
+div.fca_eoi_layout_field_wrapper {
+	border: solid 1px transparent;
+	width: 49%;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	position: relative;
+}
+
+div.fca_eoi_layout_name_field_wrapper {
+	@if $ltr { float: left; } @else { float: right; }
+}
+
+div.fca_eoi_layout_email_field_wrapper {
+	@if $ltr { float: right; } @else { float: left; }
+}
+
+div.fca_eoi_layout_inputs_wrapper_no_name div.fca_eoi_layout_field_wrapper {
+	float: none;
+	width: 100%;
+}
+
+div.fca_eoi_layout_field_wrapper input,
+div.fca_eoi_layout_field_wrapper input:focus {
+	border: none !important;
+	width: 100%;
+	height: auto;
+	font-size: 16px;
+	line-height: 1.2em;
+	padding: 7px 0;
+	outline: none;
+	background: none !important;
+	box-shadow: none;
+}
+
+div.fca_eoi_layout_submit_button_wrapper {
+	clear: both;
+}
+
+div.fca_eoi_layout_fatcatapps_link_wrapper a {
+	display: block;
+	margin: round( $content_large_padding / 2 ) 0 0;
+	font-size: 12px;
+}
+
+&.fca_eoi_layout_popup,
+&.fca_eoi_layout_widget,
+&.fca_eoi_layout_postbox {
+	div.fca_eoi_layout_content_wrapper {
+		div.fca_eoi_form_text_element.fca_eoi_layout_headline_copy_wrapper div,
+		div.fca_eoi_form_text_element.fca_eoi_layout_description_copy_wrapper div,
+		div.fca_eoi_layout_field_wrapper i.fa:before,
+		div.fca_eoi_layout_field_wrapper div.fca_eoi_layout_field_inner input,
+		div.fca_eoi_layout_field_wrapper div.fca_eoi_layout_field_inner input:focus,
+		div.fca_eoi_layout_submit_button_wrapper input,
+		div.fca_eoi_layout_submit_button_wrapper input:focus,
+		div.fca_eoi_form_text_element.fca_eoi_layout_privacy_copy_wrapper div,
+		div.fca_eoi_layout_fatcatapps_link_wrapper a {
+			@media (min-width: 1px) and (max-width: $content_small_breakpoint),
+			       (min-height: 1px) and (max-height: $content_small_breakpoint) {
+				font-size: 13px !important;
+			}
+			@media (min-width: 1px) and (max-width: $content_tiny_breakpoint),
+			       (min-height: 1px) and (max-height: $content_tiny_breakpoint) {
+				font-size: 12px !important;
+			}
+		}
+	}
+}
+
+@media ( min-width: 1px ) and ( max-width: $content_small_breakpoint ),
+       ( min-height: 1px ) and ( max-height: $content_small_breakpoint ) {
+	div.fca_eoi_layout_content_wrapper {
+		margin: $content_small_padding_vertical $content_small_padding_horizontal;
+	}
+
+	div.fca_eoi_layout_fatcatapps_link_wrapper a {
+		margin: 0;
+	}
+
+	div.fca_eoi_form_text_element.fca_eoi_layout_headline_copy_wrapper {
+		margin-bottom: 5px;
+	}
+}
+
+@media ( min-width: 1px ) and ( max-width: $content_tiny_breakpoint ),
+       ( min-height: 1px ) and ( max-height: $content_tiny_breakpoint ) {
+	div.fca_eoi_layout_popup_close {
+		top: -1px;
+		right: -1px;
+	}
+}
+
+@media ( min-width: 1px ) and ( max-width: 768px ) {
+	div.fca_eoi_layout_field_wrapper {
+		float: none;
+		width: 100%;
+	}
+}

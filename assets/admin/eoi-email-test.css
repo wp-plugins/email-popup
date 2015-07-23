@@ -1,0 +1,35 @@
+.fca_eoi_email_test {
+	margin: 12px 0 -12px -12px;
+	padding: 12px;
+	border-top: 1px solid #f0f0f0;
+	background: #f9f9f9;
+}
+
+.fca_eoi_email_test_buttons {
+	margin: 5px 0 0;
+	padding: 0;
+}
+
+.fca_eoi_email_test_buttons .button,
+.fca_eoi_email_test_buttons input {
+	margin-right: 5px;
+}
+
+.fca_eoi_email_test_buttons i {
+	font-size: 16px;
+	margin: 6px 0;
+}
+
+.fca_eoi_email_test_recommendation {
+	margin-top: 5px;
+	color: #999;
+}
+.fca_eoi_email_test_recommendation.highlighted {
+	color: #000;
+	margin-top: 0;
+}
+.fca_eoi_email_test_error {
+	color: #c00;
+	font-weight: bold;
+	margin-left: 5px;
+}

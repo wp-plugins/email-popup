@@ -1,0 +1,49 @@
+@import "layouts/common/style/outer.scss";
+
+$border_radius: 5px;
+
+div.fca_eoi_layout_5,
+form.fca_eoi_layout_5 {
+	@import "layouts/common/style/inner.scss";
+
+	div.fca_eoi_layout_headline_copy_wrapper {
+		margin-bottom: ( $content_large_padding );
+
+		@media ( min-width: 1px ) and ( max-width: $content_small_breakpoint ),
+		       ( min-height: 1px ) and ( max-height: $content_small_breakpoint ) {
+			margin-bottom: 0;
+		}
+	}
+
+	div.fca_eoi_layout_inputs_wrapper {
+		@include fca_eoi_layout_inputs_wrapper( false );
+	}
+
+	div.fca_eoi_layout_field_wrapper {
+		border-radius: $border_radius;
+	}
+
+	div.fca_eoi_layout_field_inner {
+		margin: 0 10px;
+	}
+
+	div.fca_eoi_layout_submit_button_wrapper {
+		border-bottom: solid 4px transparent;
+		border-radius: 5px;
+		padding: 0 !important;
+		text-align: center;
+		width: 100%;
+	}
+
+	div.fca_eoi_layout_submit_button_wrapper input {
+		border: 0 !important;
+		border-radius: $border_radius;
+		font-weight: bold;
+		margin: 0;
+		height: 2.8em;
+		padding: 0;
+		text-shadow: 0 0 2px black;
+		white-space: normal;
+		width: 100%;
+	}
+}

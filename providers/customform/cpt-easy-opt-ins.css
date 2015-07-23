@@ -1,0 +1,9 @@
+.fca_eoi_form_label {
+	position: relative;
+}
+
+.fca_eoi_form_label .fca_eoi_provider_status {
+	position: absolute;
+	top: 1.3em;
+	left: 27em;
+}

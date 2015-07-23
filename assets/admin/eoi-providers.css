@@ -1,0 +1,15 @@
+.fca_eoi_provider_status {
+  margin-left: 7px;
+}
+
+.fca_eoi_provider_status_loading {
+  color: #999;
+}
+
+.fca_eoi_provider_status_ok {
+  color: #3faf7f;
+}
+
+.fca_eoi_provider_status_error {
+  color: #d74a34;
+}

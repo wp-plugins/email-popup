@@ -1,0 +1,110 @@
+.tooltipster-default {
+	background: #DE607C !important;
+	border: #DE607C !important;
+	margin-top: 10px;
+}
+
+.tooltipster-base {
+	z-index: 999999992 !important;
+}
+
+.fca_eoi_featherlight, .fca_eoi_featherlight * {
+	box-sizing: border-box;
+}
+
+.fca_eoi_featherlight {
+	position: fixed;
+	background: rgba(0, 0, 0, 0.8);
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 200%;
+	z-index: 999999990;
+}
+
+.fca_eoi_featherlight-content {
+	position: absolute;
+	top: -25%;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 999999991;
+	display: table;
+}
+
+.fca_eoi_featherlight-inner {
+	display: table-cell;
+	vertical-align: middle;
+	padding: 20px;
+	text-align: center;
+}
+
+.fca_eoi_featherlight-close {
+	display: none;
+}
+
+.fca_eoi_form_wrapper {
+	width: 100%;
+	text-align: center;
+}
+
+.fca_eoi_layout_postbox,
+.fca_eoi_layout_popup,
+.fca_eoi_layout_widget {
+	width: 100%;
+	font-family: sans-serif;
+	text-align: center;
+	border: 1px solid transparent;
+}
+
+.fca_eoi_layout_popup {
+	display: inline-block;
+	position: relative;
+}
+
+@media ( max-width: 320px ), ( max-height: 320px ) {
+	.fca_eoi_featherlight-inner {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+@media ( max-height: 320px ) {
+	.fca_eoi_featherlight-inner {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+}
+
+/* <layout-2> */
+
+.fca_eoi_form_wrapper,
+.fca_eoi_form_content {
+	margin: 0;
+	padding: 0;
+}
+
+.fca_eoi_form_wrapper.fca_eoi_layout_widget_wrapper,
+.fca_eoi_form_wrapper.fca_eoi_layout_postbox_wrapper {
+	display: table;
+}
+
+.fca_eoi_form_wrapper.fca_eoi_layout_widget_wrapper .fca_eoi_form_content,
+.fca_eoi_form_wrapper.fca_eoi_layout_postbox_wrapper .fca_eoi_form_content {
+	display: table-cell;
+	margin: 0;
+}
+
+.fca_eoi_form_wrapper.fca_eoi_layout_widget_wrapper.fca_eoi_layout_2_wrapper .fca_eoi_form_content,
+.fca_eoi_form_wrapper.fca_eoi_layout_postbox_wrapper.fca_eoi_layout_2_wrapper .fca_eoi_form_content {
+	padding: 0 10px;
+}
+
+@media ( max-width: 450px ), ( max-height: 450px ) {
+	.fca_eoi_form_wrapper.fca_eoi_layout_widget_wrapper.fca_eoi_layout_2_wrapper .fca_eoi_form_content,
+	.fca_eoi_form_wrapper.fca_eoi_layout_postbox_wrapper.fca_eoi_layout_2_wrapper .fca_eoi_form_content {
+		padding: 0;
+	}
+}
+
+/* </layout-2> */

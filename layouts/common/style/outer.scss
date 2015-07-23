@@ -1,0 +1,49 @@
+@import "layouts/common/style/reset.scss";
+
+* {
+	box-sizing: border-box;
+}
+
+div.fca_eoi_form_text_element,
+input.fca_eoi_form_input_element,
+input.fca_eoi_form_button_element {
+	@include fca_eoi_reset();
+	@include fca_eoi_reset_font_properties();
+}
+
+div.fca_eoi_form_text_element {
+	text-align: center;
+}
+
+*:before,
+*:after {
+	display: none;
+}
+
+i.fa,
+i.fa:before {
+	@include fca_eoi_reset();
+}
+
+div.fca_eoi_layout_popup_close {
+    @include fca_eoi_reset();
+    @include fca_eoi_reset_font_properties();
+	display: block;
+	position: absolute;
+	z-index: 9999992;
+	top: -10px;
+	right: -10px;
+	background: rgba(0, 0, 0, 0.6);
+	border: 1px solid #000;
+	color: #fff;
+	font-weight: bold;
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	text-align: center;
+	cursor: pointer;
+}
+
+div.fca_eoi_layout_headline_copy_wrapper {
+	font-weight: bold;
+}

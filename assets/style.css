@@ -1,0 +1,13 @@
+.tooltipster-default {
+	background: #DE607C !important;
+	border: #DE607C !important;
+	margin-top: 10px;
+}
+.fca_eoi_lightbox {
+	width: 650px;
+}
+.featherlight {
+	background-color: rgba(0, 0, 0, 0.8);
+	width: 100%;
+	z-index: 9999990;
+}
