@@ -7,19 +7,48 @@
 class EasyOptInsUpgrade {
     
     private $settings;
-    private $fca_maketing_page_left_menu;
-    private $fca_maketing_page_top_ad;
+
+    private $submenu_link;
+    private $sidebar_link;
+    private $editor_link;
 
     public function __construct( $settings=null ) {
         
         global $pagenow;
         $this->settings = $settings;
-        
-        $this->fca_maketing_page_left_menu = 'https://fatcatapps.com/optincat?utm_campaign=wp%2Bsubmenu&utm_source=Optin%2BCat%2BFree&utm_medium=plugin';
-        $this->fca_maketing_page_top_ad = 'https://fatcatapps.com/optincat?utm_campaign=plugin%2Btop%2Bad&utm_source=Optin%2BCat%2BFree&utm_medium=plugin';
+
+        if ( $this->has_provider( 'aweber' ) ) {
+            $this->submenu_link = 'https://fatcatapps.com/optincat/upgrade/?utm_campaign=wp%2Bsubmenu&utm_source=Optin%2BCat%2BFree%2BAweber&utm_medium=plugin';
+            $this->sidebar_link = 'https://fatcatapps.com/optincat/upgrade/?utm_campaign=sidebar%2Bad&utm_source=Optin%2BCat%2BFree%2BAweber&utm_medium=plugin';
+            $this->editor_link  = 'https://fatcatapps.com/optincat/upgrade/?utm_campaign=editor%2Bad&utm_source=Optin%2BCat%2BFree%2BAweber&utm_medium=plugin';
+        } elseif ( $this->has_provider( 'campaignmonitor' ) ) {
+            $this->submenu_link = 'https://fatcatapps.com/optincat/upgrade/?utm_campaign=wp%2Bsubmenu&utm_source=Optin%2BCat%2BFree%2BCampaign%2BMonitor&utm_medium=plugin';
+            $this->sidebar_link = 'https://fatcatapps.com/optincat/upgrade/?utm_campaign=sidebar%2Bad&utm_source=Optin%2BCat%2BFree%2BCampaign%2BMonitor&utm_medium=plugin';
+            $this->editor_link  = 'https://fatcatapps.com/optincat/upgrade/?utm_campaign=editor%2Bad&utm_source=Optin%2BCat%2BFree%2BCampaign%2BMonitor&utm_medium=plugin';
+        } elseif ( $this->has_provider( 'getresponse' ) ) {
+            $this->submenu_link = 'https://fatcatapps.com/optincat/upgrade/?utm_campaign=wp%2Bsubmenu&utm_source=Optin%2BCat%2BFree%2BGetResponse&utm_medium=plugin';
+            $this->sidebar_link = 'https://fatcatapps.com/optincat/upgrade/?utm_campaign=sidebar%2Bad&utm_source=Optin%2BCat%2BFree%2BGetResponse&utm_medium=plugin';
+            $this->editor_link  = 'https://fatcatapps.com/optincat/upgrade/?utm_campaign=editor%2Bad&utm_source=Optin%2BCat%2BFree%2BGetResponse&utm_medium=plugin';
+        } elseif ( $this->has_provider( 'mailchimp' ) ) {
+            $this->submenu_link = 'https://fatcatapps.com/optincat/upgrade/m?utm_campaign=wp%2Bsubmenu&utm_source=Optin%2BCat%2BFree%2BMailChimp&utm_medium=plugin';
+            $this->sidebar_link = 'https://fatcatapps.com/optincat/upgrade/m?utm_campaign=sidebar%2Bad&utm_source=Optin%2BCat%2BFree%2BMailChimp&utm_medium=plugin';
+            $this->editor_link  = 'https://fatcatapps.com/optincat/upgrade/m?utm_campaign=editor%2Bad&utm_source=Optin%2BCat%2BFree%2BMailChimp&utm_medium=plugin';
+        } elseif ( $this->has_provider('customform') ) {
+            $this->submenu_link = 'https://fatcatapps.com/optincat/upgrade/p?utm_campaign=wp%2Bsubmenu&utm_source=Optin%2BCat%2BFree%2BPopup&utm_medium=plugin';
+            $this->sidebar_link = 'https://fatcatapps.com/optincat/upgrade/p?utm_campaign=sidebar%2Bad&utm_source=Optin%2BCat%2BFree%2BPopup&utm_medium=plugin';
+            $this->editor_link  = 'https://fatcatapps.com/optincat/upgrade/p?utm_campaign=editor%2Bad&utm_source=Optin%2BCat%2BFree%2BPopup&utm_medium=plugin';
+        } else {
+            $this->submenu_link = 'https://fatcatapps.com/optincat/upgrade/p?utm_campaign=wp%2Bsubmenu&utm_source=Optin%2BCat%2BFree&utm_medium=plugin';
+            $this->sidebar_link = 'https://fatcatapps.com/optincat/upgrade/p?utm_campaign=sidebar%2Bad&utm_source=Optin%2BCat%2BFree&utm_medium=plugin';
+            $this->editor_link  = 'https://fatcatapps.com/optincat/upgrade/p?utm_campaign=editor%2Bad&utm_source=Optin%2BCat%2BFree&utm_medium=plugin';
+        }
 
         add_action( 'admin_menu', array( $this, 'fca_eoi_upgrade_to_premium_menu' ));
         add_action( 'admin_footer', array( $this, 'admin_footer' ) );
+    }
+
+    private function has_provider( $provider ) {
+        return in_array( $provider, array_keys( $this->settings['providers'] ) );
     }
 
     function admin_footer() {
@@ -36,9 +65,9 @@ class EasyOptInsUpgrade {
         $message =
             '<div>' .
                 'Thanks for using Optin Cat. Do you like this plugin? ' .
-                '<a href="' . $this->fca_maketing_page_top_ad . '" target="_blank">Optin Cat Premium</a> ' .
+                '<a href="' . $this->sidebar_link . '" target="_blank">Optin Cat Premium</a> ' .
                 'comes with even more features that help you grow your list. Love it or get your money back. ' .
-                '<a href="' . $this->fca_maketing_page_top_ad . '" target="_blank">Learn more here</a>.' .
+                '<a href="' . $this->sidebar_link . '" target="_blank">Learn more here</a>.' .
             '</div>';
 
         ?>
@@ -129,7 +158,7 @@ class EasyOptInsUpgrade {
                         </ul>
 
                         <div class="fca_eoi_centered">
-                            <a href="<?php echo $this->fca_maketing_page_top_ad ?>" class="button-primary button-large" target="_blank">
+                            <a href="<?php echo $this->sidebar_link ?>" class="button-primary button-large" target="_blank">
                                 Upgrade to Premium
                             </a>
                         </div>
@@ -140,7 +169,7 @@ class EasyOptInsUpgrade {
 
         <?php
 
-        $template = '<div class="__class__"><a href="' . $this->fca_maketing_page_top_ad . '" target="_blank">__text__ &gt;&gt;</a></div>';
+        $template = '<div class="__class__"><a href="' . $this->editor_link . '" target="_blank">__text__ &gt;&gt;</a></div>';
 
         $script = basename( $_SERVER['SCRIPT_NAME'] );
         if ( $script == 'post.php' || $script == 'post-new.php' ) { ?>
@@ -198,7 +227,7 @@ class EasyOptInsUpgrade {
    
     function fca_eoi_upgrade_to_premium_redirect() {
         
-        wp_redirect( $this->fca_maketing_page_left_menu, 301 );
+        wp_redirect( $this->submenu_link, 301 );
         exit();
       }
       

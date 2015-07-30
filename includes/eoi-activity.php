@@ -90,9 +90,12 @@ class EasyOptInsActivity {
 
 		require_once $this->settings['plugin_dir'] . 'includes/classes/RobotDetector/RobotDetector.php';
 
-		$robot_detector = new RobotDetector();
-		if ( ! $robot_detector->is_robot() ) {
-			$this->add_impression( (int) $_REQUEST['fca_eoi_track_form_id'] );
+		$form_id = (int) $_REQUEST['fca_eoi_track_form_id'];
+		if ( get_post($form_id) ) {
+			$robot_detector = new RobotDetector();
+			if ( ! $robot_detector->is_robot() ) {
+				$this->add_impression( $form_id );
+			}
 		}
 
 		exit;

@@ -1,13 +1,13 @@
 === Email Popup by Optin Cat ===
 Contributors: fatcatapps, davidhme
-Donate link: https://fatcatapps.com/optincat?utm_campaign=description%2Bcta&utm_source=https%3A%2F%2Fwordpress.org%2Fplugins%2FPopup%2F&utm_medium=referral
+Donate link: https://fatcatapps.com/optincat/upgrade/p?utm_campaign=description%2Bcta&utm_source=https%3A%2F%2Fwordpress.org%2Fplugins%2Femail-popup%2F&utm_medium=referral
 Tags: popup, email popup, wordpress popup, wordpress popup plugin, list building, email popups, email popups wordpress, email popups form, email popups widget, email popups plugin, lightbox popup
  
 Author URI: https://fatcatapps.com/
-Plugin URI: https://fatcatapps.com/optincat
+Plugin URI: https://fatcatapps.com/optincat/upgrade/p?utm_campaign=description%2Bcta&utm_source=https%3A%2F%2Fwordpress.org%2Fplugins%2Femail-popup%2F&utm_medium=referral
 Requires at least: 3.9.1
 Tested up to: 4.3
-Stable tag: 1.3.7.3
+Stable tag: 1.3.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -94,7 +94,7 @@ When it comes to features, here’s what you’ll find in the premium version of
 > + Content Upgrades: Send optin baits & content upgrades straight from your WordPress backend.<br /><br />
 > + Exit Intervention: Display popups when the user is about to leave your site.<br />
 >
-> [Want to learn more about the premium version of Email Popup by Optin Cat? Visit the following link to see all that the premium version of our popup plugin has to offer>>](https://fatcatapps.com/optincat?utm_campaign=description%2Bcta&utm_source=https%3A%2F%2Fwordpress.org%2Fplugins%2FPopup%2F&utm_medium=referral)
+> [Want to learn more about the premium version of Email Popup by Optin Cat? Visit the following link to see all that the premium version of our popup plugin has to offer>>](https://fatcatapps.com/optincat/upgrade/p?utm_campaign=description%2Bcta&utm_source=https%3A%2F%2Fwordpress.org%2Fplugins%2Femail-popup%2F&utm_medium=referral)
  
 == Frequently Asked Questions ==
  
@@ -200,37 +200,40 @@ Ready for some popup magic? Here’s how you install Email Popup by Optin Cat:
  
 == Changelog ==
 
-= 1.3.7.3 =
+= Email Popup by Optin Cat 1.3.8 =
+* Fixed an issue related to bots causing fake conversion data.
+
+= Email Popup by Optin Cat 1.3.7.3 =
 * Improved formatting of Email Popup by Optin Cat readme 
 
-= 1.3.7.2 =
+= Email Popup by Optin Cat 1.3.7.2 =
 * Fixed spelling mistake
  
-= 1.3.7.1 =
+= Email Popup by Optin Cat 1.3.7.1 =
 * Improved formatting of Email Popup by Optin Cat readme
  
-= 1.3.7 =
+= Email Popup by Optin Cat 1.3.7 =
 * Tiny fix: Within Email Popup by Optin Cat, ignore shortcode if the global $post is empty
  
-= 1.3.6 =
+= Email Popup by Optin Cat 1.3.6 =
 * Fixed a bug in the Popup targeting engine introduced in Popup Forms by Optin Cat 1.3.5.
  
-= 1.3.5 =
+= Email Popup by Optin Cat 1.3.5 =
 * Improved Popup Popup targeting engine: changed how a session is counted in Email Popup by Optin Cat (a session now expires after 30 minutes of inactivity).
  
-= 1.3.4 =
+= Email Popup by Optin Cat 1.3.4 =
 * Improved Email Popup by Optin Cat’s Popup targeting engine for better performance.
  
-= 1.3.3 =
+= Email Popup by Optin Cat 1.3.3 =
 * Performance improvements to Email Popup by Optin Cat
 * Minor Bugfixes for Email Popup by Optin Cat
  
-= 1.3.2 =
+= Email Popup by Optin Cat 1.3.2 =
 * Fixed a bug in Email Popup by Optin Cat that caused display issues on some sites after unchecking the "New CSS" powerup
  
-= 1.3.1 =
+= Email Popup by Optin Cat 1.3.1 =
 * Fixed a bug in Email Popup by Optin Cat that caused some conversions to be tracked more than once
  
-= 1.3 =
+= Email Popup by Optin Cat 1.3 =
 * Beta Release of Email Popup by Optin Cat
 
