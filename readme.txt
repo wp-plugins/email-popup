@@ -7,7 +7,7 @@ Author URI: https://fatcatapps.com/
 Plugin URI: https://fatcatapps.com/optincat/upgrade/p?utm_campaign=description%2Bcta&utm_source=https%3A%2F%2Fwordpress.org%2Fplugins%2Femail-popup%2F&utm_medium=referral
 Requires at least: 3.9.1
 Tested up to: 4.3
-Stable tag: 1.3.8
+Stable tag: 1.3.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -199,6 +199,10 @@ Ready for some popup magic? Here’s how you install Email Popup by Optin Cat:
 3. In your sidebar, find our popup plugin and select 'Optin Cat -> Add New' to create a new popup
  
 == Changelog ==
+
+= Email Popup by Optin Cat 1.3.9 =
+* Fixed: A bug in our popup targeting engine caused the "display once per month" criteria to not work as expected in some cases, which kinda defeated the purpose of our fancy targeting engine.
+* Fixed: Optin Cat caused a site's W3 HTML validation to fail due to the placement of the <style>-tag. This wasn't a big problem (all browsers always rendered Optin Cat properly), but not ideal.
 
 = Email Popup by Optin Cat 1.3.8 =
 * Fixed an issue related to bots causing fake conversion data.

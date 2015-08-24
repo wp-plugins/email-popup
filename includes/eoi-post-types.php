@@ -9,7 +9,9 @@ class EasyOptInsPostTypes {
 		'dashboard_widget' => 30
 	);
 
-	private $targeting_cat_path = 'assets/vendor/targeting-cat/TargetingCat-OptinCat-1.1.min.js';
+	private $targeting_cat_path = 'assets/vendor/targeting-cat/TargetingCat-OptinCat-1.2.min.js';
+
+	private $two_step_ids_on_page = array();
 
 	public function __construct( $settings ) {
 
@@ -71,7 +73,13 @@ class EasyOptInsPostTypes {
 
 		add_filter( 'init', array( $this, 'bind_content_filter' ), 10 );
 
-		add_filter( 'init', array( $this, 'parse_tc_condition_request' ), 1 );
+		add_filter( 'template_redirect', array( $this, 'parse_tc_condition_request' ), 1 );
+
+		add_filter( 'the_content', array( $this, 'scan_for_shortcodes' ) );
+
+		add_filter( 'init', array( $this, 'request_prepare_lightbox' ) );
+
+		add_filter( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		add_filter( 'wp_footer', array( $this, 'show_lightbox' ) );
 
@@ -89,6 +97,10 @@ class EasyOptInsPostTypes {
 			require $this->settings[ 'plugin_dir' ] . 'includes/licensing.php';
 			new  EasyOptInsLicense( $this->settings );
 		}
+	}
+
+	public function enqueue_scripts() {
+		wp_enqueue_script( 'jquery' );
 	}
 
 	public function more_settings() {
@@ -2038,7 +2050,7 @@ class EasyOptInsPostTypes {
 
 		// Append postcode shortcode when the conditions match
 		foreach( $fca_eoi_last_99_forms as $f) {
-		
+
 			// Exclude other layout types
 			if ( empty ( $f[ 'fca_eoi' ][ 'layout' ] ) ) {
 				continue;
@@ -2046,10 +2058,10 @@ class EasyOptInsPostTypes {
 			if ( strpos( $f[ 'fca_eoi' ][ 'layout' ], 'postbox_' ) !== 0 ) {
 				continue;
 			}
-		
+
 			// Get conditions
 			$eoi_form_cond = K::get_var( 'publish_postbox', $f[ 'fca_eoi' ], array() );
-		
+
 			// Append
 			if ( array_intersect( $eoi_form_cond, $post_cond ) ) {
 				foreach ( $eoi_form_cond as $cond ) {
@@ -2071,17 +2083,6 @@ class EasyOptInsPostTypes {
 			$post->post_content .= reset( $postboxes );
 			return;
 		}
-	}
-
-	private function enqueue_featherlight() {
-		wp_enqueue_script( 'featherlight'
-			, $this->settings['plugin_url'] . '/assets/vendor/featherlight/release/featherlight.min.js'
-			, array( 'jquery' )
-		);
-
-		wp_enqueue_style( 'featherlight'
-			, $this->settings['plugin_url'] . '/assets/vendor/featherlight/release/featherlight.min.css'
-		);
 	}
 
 	private function get_tc_token( $form_id ) {
@@ -2270,44 +2271,12 @@ class EasyOptInsPostTypes {
 		return $cookie_configuration;
 	}
 
-	private function prepare_targeting_cat() {
-		static $prepared = false;
-
-		if ( $prepared ) {
-			return;
-		} else {
-			$prepared = true;
+	public function scan_for_shortcodes( $content ) {
+		if ( preg_match_all( '/data-optin-cat\s*=\s*["\']?\s*(\d+)/', $content, $matches ) ) {
+			$this->two_step_ids_on_page = array_map( 'intval', $matches[1] );
 		}
 
-		wp_enqueue_script( 'TargetingCat', $this->settings['plugin_url'] . '/' . $this->targeting_cat_path );
-
-		?>
-		<script>
-			var fca_eoi_tc_configured = false;
-
-			function fca_eoi_on_conditions_pass( form_id, callback ) {
-				jQuery.post( window.location.href, {
-					'fca_eoi_tc_condition_post_id': <?php echo $GLOBALS['post']->ID ?>,
-					'fca_eoi_tc_conditions_for': form_id
-				}, function( descriptors ) {
-					if ( ! fca_eoi_tc_configured ) {
-						TargetingCat_OptinCat.StorageManagerSessionPermanent.get_instance().default_configuration = <?php echo json_encode( $this->get_cookie_configuration() ) ?>;
-						fca_eoi_tc_configured = true;
-					}
-
-					if ( typeof descriptors === 'string' ) {
-						descriptors = JSON.parse( descriptors );
-					}
-
-					var evaluable = TargetingCat_OptinCat.ConditionManager.get_instance().parse_descriptors( descriptors );
-					if ( evaluable ) {
-						evaluable.set_pass_callback( callback );
-						evaluable.evaluate();
-					}
-				} );
-			}
-		</script>
-		<?php
+		return $content;
 	}
 
 	public function show_lightbox() {
@@ -2318,8 +2287,6 @@ class EasyOptInsPostTypes {
 				return;
 			}
 		}
-
-		$has_two_step_optin = false;
 
 		// Get lightboxes
 		$lightboxes = get_posts( array(
@@ -2336,8 +2303,258 @@ class EasyOptInsPostTypes {
 			return;
 		}
 
-		$has_lightboxes = false;
+		$two_step_ids = array();
+		$traditional_ids = array();
 
+		foreach ( $lightboxes as $lightbox ) {
+
+			// Get conditions
+			$lightbox->fca_eoi = get_post_meta( $lightbox->ID , 'fca_eoi', true );
+			$publish_lightbox_mode = K::get_var( 'publish_lightbox_mode', $lightbox->fca_eoi, array() );
+
+			// If on a free distribution, force traditional popup mode
+			if ( 'free' === $this->settings['distribution'] ) {
+				$publish_lightbox_mode = 'traditional_popup';
+			}
+
+			if ( 'two_step_optin' === $publish_lightbox_mode ) {
+				$two_step_ids[] = $lightbox->ID;
+			} else {
+				$traditional_ids[] = $lightbox->ID;
+			}
+		}
+
+		$this->display_traditional_popups($traditional_ids, $this->display_two_step_popups($two_step_ids));
+	}
+
+	private function display_two_step_popups($lightbox_ids) {
+		$lightbox_ids = array_intersect( $lightbox_ids, $this->two_step_ids_on_page );
+
+		if ( empty( $lightbox_ids ) ) {
+			return false;
+		}
+
+		foreach ( $lightbox_ids as $lightbox_id ) {
+			$this->prepare_lightbox( $lightbox_id );
+		}
+
+		?>
+		<script>
+			jQuery( function( $ ) {
+				$( '[data-optin-cat]' ).live( 'click', function( e ) {
+					var lightbox_id = $( this ).data( 'optin-cat' );
+					<?php echo EasyOptInsActivity::get_instance()->get_tracking_code( 'lightbox_id', false ) ?>
+					$.featherlight( $( '#fca_eoi_lightbox_' + lightbox_id ), <?php echo $this->get_featherlight_options() ?> );
+					e.preventDefault();
+				} );
+			} );
+		</script>
+		<?php
+
+		return true;
+	}
+
+	private function display_traditional_popups( $lightbox_ids, $prerequisites_loaded = false ) {
+		if ( empty( $lightbox_ids ) ) {
+			return false;
+		}
+
+		?>
+		<script type="text/javascript" src="<?php echo $this->settings['plugin_url'] . '/' . $this->targeting_cat_path ?>"></script>
+		<script>
+			(function() {
+				if ( typeof fca_eoi === "undefined" ) {
+					fca_eoi = {};
+				}
+
+				var error_text = <?php echo json_encode( $this->settings['error_text'] ); ?>;
+				Object.keys( error_text ).forEach( function( key ) {
+					fca_eoi[ key ] = error_text[ key ];
+				} );
+
+				fca_eoi.ajax_url = <?php echo json_encode( admin_url( 'admin-ajax.php' ) ) ?>;
+			})();
+
+			<?php $v = array(
+				'prerequisites_loaded' => 'p',
+				'load_prerequisites' => 'l',
+				'head' => 'h',
+				'load_script' => 'c',
+				'load_style' => 'y',
+				'callback' => 'k',
+				'vendor_url' => 'v',
+				'done' => 'n',
+				'document' => 'd',
+				'window.location.href' => 'w',
+				'display_popup' => 's',
+				'false' => '!1',
+				'true' => '1',
+				'evaluable' => 'e',
+				'descriptors' => 'r',
+				'form_id' => 'm',
+				'TargetingCat_OptinCat' => 'g',
+				'url' => 'u'
+			); ?>
+
+			<?php ob_start(); ?>
+
+			jQuery( function( $ ) {
+				var
+					<?php echo $v['document'] ?> = document,
+					<?php echo $v['window.location.href'] ?> = window.location.href,
+					<?php echo $v['TargetingCat_OptinCat'] ?> = TargetingCat_OptinCat;
+
+				<?php if ( ! $prerequisites_loaded ) { ?>
+
+					var
+						<?php echo $v['prerequisites_loaded'] ?> = <?php echo $v['false'] ?>,
+						<?php echo $v['head'] ?> = <?php echo $v['document'] ?>.head;
+
+					function <?php echo $v['load_script'] ?>( <?php echo $v['url'] ?>, <?php echo $v['callback'] ?> ) {
+						var e = <?php echo $v['document'] ?>.createElement( 'script' );
+
+						e.type   = 'text/javascript';
+						e.src    = <?php echo $v['url'] ?>;
+						e.onload = <?php echo $v['callback'] ?>;
+
+						<?php echo $v['head'] ?>.appendChild( e );
+					}
+
+					function <?php echo $v['load_style'] ?>( <?php echo $v['url'] ?>, <?php echo $v['callback'] ?> ) {
+						var e = <?php echo $v['document'] ?>.createElement( 'link' );
+
+						e.rel    = 'stylesheet';
+						e.type   = 'text/css';
+						e.href   = <?php echo $v['url'] ?>;
+						e.onload = <?php echo $v['callback'] ?>;
+
+						<?php echo $v['head'] ?>.appendChild( e );
+					}
+
+					function <?php echo $v['load_prerequisites'] ?>( <?php echo $v['callback'] ?> ) {
+						if ( <?php echo $v['prerequisites_loaded'] ?> ) {
+							<?php echo $v['callback'] ?>();
+							return;
+						}
+
+						var t = 7,
+							<?php echo $v['url'] ?> = <?php echo json_encode( $this->settings[ 'plugin_url' ] . '/assets/' ) ?>,
+							<?php echo $v['vendor_url'] ?> = <?php echo $v['url'] ?> + 'vendor/',
+							<?php echo $v['done'] ?> = function() {
+								if ( ! --t ) {
+									<?php echo $v['prerequisites_loaded'] ?> = <?php echo $v['true'] ?>;
+									<?php echo $v['callback'] ?>();
+								}
+							};
+
+						<?php echo $v['load_style'] ?>( '//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css', <?php echo $v['done'] ?> );
+
+						<?php echo $v['load_script'] ?>( <?php echo $v['url'] ?> + 'script.js', <?php echo $v['done'] ?> );
+						<?php echo $v['load_style'] ?>( <?php echo $v['url'] ?> + 'style<?php echo EasyOptInsLayout::uses_new_css() ? '-new' : '' ?>.css', <?php echo $v['done'] ?> );
+
+						<?php echo $v['load_script'] ?>( <?php echo $v['vendor_url'] ?> + 'tooltipster/jquery.tooltipster.min.js', <?php echo $v['done'] ?> );
+						<?php echo $v['load_style'] ?>( <?php echo $v['vendor_url'] ?> + 'tooltipster/tooltipster.min.css', <?php echo $v['done'] ?> );
+
+						<?php echo $v['load_script'] ?>( <?php echo $v['vendor_url'] ?> + 'featherlight/release/featherlight.min.js', <?php echo $v['done'] ?> );
+						<?php echo $v['load_style'] ?>( <?php echo $v['vendor_url'] ?> + 'featherlight/release/featherlight.min.css', <?php echo $v['done'] ?> );
+					}
+
+				<?php } ?>
+
+				function <?php echo $v['display_popup'] ?>( <?php echo $v['form_id'] ?> ) {
+					var t = <?php echo $prerequisites_loaded ? 1 : 2 ?>,
+						<?php echo $v['done'] ?> = function() {
+							if ( ! --t ) {
+								$.featherlight(
+									$( '#fca_eoi_lightbox_' + <?php echo $v['form_id'] ?> ),
+									<?php echo $this->get_featherlight_options() ?>
+								);
+								<?php echo EasyOptInsActivity::get_instance()->get_tracking_code( $v['form_id'], false ) ?>
+							}
+						};
+
+					$.post( <?php echo $v['window.location.href'] ?>, {
+						fca_eoi_prepare_lightbox: <?php echo $v['form_id'] ?>
+					}, function( html ) {
+						<?php echo $v['document'] ?>.body.innerHTML += html;
+						<?php echo $v['done'] ?>();
+					} );
+
+					<?php if ( ! $prerequisites_loaded ) { ?>
+						<?php echo $v['load_prerequisites'] ?>( <?php echo $v['done'] ?> );
+					<?php } ?>
+				}
+
+				<?php echo $v['TargetingCat_OptinCat'] ?>.StorageManagerSessionPermanent.get_instance().default_configuration = <?php echo json_encode( $this->get_cookie_configuration() ) ?>;
+
+				<?php echo json_encode( $lightbox_ids ) ?>.forEach( function( <?php echo $v['form_id'] ?> ) {
+					$.post( <?php echo $v['window.location.href'] ?>, {
+						<?php if ( is_single() || is_page() ) { ?>
+							'fca_eoi_tc_condition_post_id': <?php echo get_the_ID() ?>,
+						<?php } ?>
+						'fca_eoi_tc_conditions_for': <?php echo $v['form_id'] ?>
+					}, function( <?php echo $v['descriptors'] ?> ) {
+						var <?php echo $v['evaluable'] ?> = <?php echo $v['TargetingCat_OptinCat'] ?>.ConditionManager.get_instance().parse_descriptors(
+							typeof <?php echo $v['descriptors'] ?> === 'string'
+								? JSON.parse( <?php echo $v['descriptors'] ?> )
+								: <?php echo $v['descriptors'] ?>
+						);
+						if ( <?php echo $v['evaluable'] ?> ) {
+							<?php echo $v['evaluable'] ?>.set_pass_callback( function() {
+								<?php echo $v['display_popup'] ?>( <?php echo $v['form_id'] ?> );
+							} );
+							<?php echo $v['evaluable'] ?>.evaluate();
+						}
+					} );
+				} );
+
+				$( '.fca_eoi_featherlight' ).live( 'click', function( e ) {
+					if ( $( e.target ).is( '.fca_eoi_featherlight-inner, .fca_eoi_form_content' ) ) {
+						$( '.fca_eoi_layout_popup_close' ).click();
+					}
+				} );
+			} );
+
+			<?php
+
+			echo preg_replace(
+				array( '/\s+/', '/([-+|\(\){}&=;,:?])\s+/', '/\s+([-+|\(\){}&=?])/', '/;}/' ),
+				array( ' ', '$1', '$1', '}' ),
+				trim( ob_get_clean() )
+			);
+
+			?>
+		</script>
+		<?php
+
+		return true;
+	}
+
+	public function request_prepare_lightbox() {
+		if (array_key_exists('fca_eoi_prepare_lightbox', $_POST)) {
+			$lightbox_id = (int) $_POST['fca_eoi_prepare_lightbox'];
+			if ( $lightbox_id > 0 ) {
+				$this->prepare_lightbox( $lightbox_id );
+				exit;
+			}
+		}
+	}
+
+	public function prepare_lightbox( $id ) {
+		$id = (int) $id;
+
+		$featherlight_class = EasyOptInsLayout::uses_new_css() ? 'fca_eoi_featherlight' : 'featherlight';
+		$content = do_shortcode( "[easy-opt-in id=$id]" );
+
+		?>
+		<div style="display:none">
+			<style scoped>.<?php echo $featherlight_class ?>-content { background: transparent !important; }</style>
+			<div id="fca_eoi_lightbox_<?php echo $id ?>"><?php echo $content ?></div>
+		</div>
+		<?php
+	}
+
+	private function get_featherlight_options() {
 		if ( EasyOptInsLayout::uses_new_css() ) {
 			$is_iphone = preg_match('/(?:iPhone|iPod);/i', $_SERVER['HTTP_USER_AGENT']);
 			$is_ios = preg_match( '/(?:iPhone|iPad|iPod).* OS ([\d])_.* Safari/', $_SERVER['HTTP_USER_AGENT'], $matches );
@@ -2391,94 +2608,13 @@ class EasyOptInsPostTypes {
 				$ios_specific_options = '';
 			}
 
-			$featherlight_options = '{
-					namespace: "fca_eoi_featherlight",
-					otherClose: ".fca_eoi_layout_popup_close"' . $ios_specific_options . ',
-					variant: ' . ( $is_iphone ? '"fca_eoi_device_iphone"' : 'null' ) . '
-				}';
+			return '{
+				namespace: "fca_eoi_featherlight",
+				otherClose: ".fca_eoi_layout_popup_close"' . $ios_specific_options . ',
+				variant: ' . ( $is_iphone ? '"fca_eoi_device_iphone"' : 'null' ) . '
+			}';
 		} else {
-			$featherlight_options = 'undefined';
-		}
-
-		foreach ( $lightboxes as $lightbox ) {
-
-			// Get conditions
-			$lightbox->fca_eoi = get_post_meta( $lightbox->ID , 'fca_eoi', true );
-			$publish_lightbox_mode = K::get_var( 'publish_lightbox_mode', $lightbox->fca_eoi, array() );
-
-			// If on a free distribution, force traditional popup mode
-			if ( 'free' === $this->settings['distribution'] ) {
-				$publish_lightbox_mode = 'traditional_popup';
-			}
-
-			if ( 'two_step_optin' === $publish_lightbox_mode ) {
-				$has_two_step_optin = true;
-			}
-
-			$has_lightboxes = true;
-
-			// Output
-			printf( '
-				<style>.%s-content { background: transparent !important; }</style>
-				<div style="display:none"><div id="fca_eoi_lightbox_%s">%s</div></div>'
-				, EasyOptInsLayout::uses_new_css() ? 'fca_eoi_featherlight' : 'featherlight'
-				, $lightbox->ID
-				, do_shortcode( "[easy-opt-in id=$lightbox->ID]" )
-			);
-
-			if ( ! $has_two_step_optin ) {
-				$this->prepare_targeting_cat();
-				?>
-				<script>
-					jQuery( function() {
-						fca_eoi_on_conditions_pass( <?php echo $lightbox->ID ?>, function() {
-							jQuery.featherlight( jQuery( '#fca_eoi_lightbox_<?php echo $lightbox->ID; ?>' ), <?php echo $featherlight_options ?> );
-							<?php echo EasyOptInsActivity::get_instance()->get_tracking_code( $lightbox->ID ) ?>
-						} );
-					} );
-				</script>
-				<?php
-			}
-		}
-
-		if ( $has_two_step_optin ) {
-			$has_lightboxes = true;
-
-			?>
-			<script>
-				jQuery( document ).ready( function( $ ) {
-
-					var $ = jQuery;
-					$( '[data-optin-cat]' ).click( function( e ) {
-
-						var $this = $( this );
-						var lightbox_ID = $this.data( 'optin-cat' );
-						<?php echo EasyOptInsActivity::get_instance()->get_tracking_code( 'lightbox_ID', false ) ?>
-						$.featherlight( $( '#fca_eoi_lightbox_' + lightbox_ID ), <?php echo $featherlight_options ?> );
-						e.preventDefault();
-					} );
-				} );
-			</script>
-			<?php
-		}
-
-		if ( $has_lightboxes ) {
-			$this->enqueue_featherlight();
-
-			?>
-			<script>
-				jQuery( function( $ ) {
-					$( '.fca_eoi_featherlight' ).live( 'click', function( event ) {
-						var target = $( event.target );
-
-						if ( target.hasClass( 'fca_eoi_featherlight-inner' ) ||
-							target.hasClass( 'fca_eoi_form_content' ) ) {
-							$( '.fca_eoi_layout_popup_close' ).click();
-						}
-					} );
-				} );
-			</script>
-			<?php
+			return 'undefined';
 		}
 	}
 }
