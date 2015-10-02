@@ -161,13 +161,16 @@ class EasyOptInsShortcodes {
 	}
 
 	public function button() {
+		if (current_user_can( 'delete_pages')){
+		
 		$button_title = __( 'Optin Cat' );
-
+		
 		if ( version_compare( $GLOBALS['wp_version'], '3.5', '<' ) ) {
 			echo '<a href="#TB_inline?width=640&inlineId=fca-eoi-shortcode-thickbox" class="thickbox" title="' . $button_title . '">' . $button_title . '</a>';
 		} else {
 			$img = '<span class="wp-media-buttons-icon" id="fca-eoi-media-button"></span>';
 			echo '<a href="#TB_inline?width=640&inlineId=fca-eoi-shortcode-thickbox" class="thickbox button" title="' . $button_title . '" style="padding-left: .4em;">' . $img . $button_title . '</a>';
+		}
 		}
 	}
 
@@ -313,7 +316,7 @@ class EasyOptInsShortcodes {
 		$layout_type    = $layout->layout_type;
 		$html_path      = $layout->path_to_resource( 'layout', 'html' );
 		$html_wrap_path = $layout->path_to_html_wrapper();
-
+		
 		if ( ! file_exists( $html_path ) ) {
 			return '';
 		}

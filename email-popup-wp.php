@@ -4,7 +4,7 @@
     Plugin URI: https://fatcatapps.com/optincat
     Description: Email Popup By Optin Cat WordPress Lets You Convert More Blog Viisots Into Email Subscribers. Set It Up In 2 Minutes.
     Author: Fatcat Apps
-    Version: 1.3.9
+    Version: 1.4.0
     Author URI: https://fatcatapps.com/
 */
 
@@ -12,6 +12,16 @@
 if ( ! function_exists( 'is_admin' ) ) {
     exit();
 }
+
+/* REMOVE LINKS FOR USERS WITH FEWER PERMISSIONS THAN EDITOR */
+			
+function FCA_EOI_remove_admin_bar_link() {
+	if (!current_user_can( 'delete_others_pages' )){
+		remove_meta_box( 'fca_eoi_dashboard_widget', 'dashboard', 'normal' );	
+	}
+}
+
+add_action( 'wp_before_admin_bar_render', 'FCA_EOI_remove_admin_bar_link' );
 
 require 'includes/skelet/skelet.php';
 
@@ -49,11 +59,24 @@ if ( ! class_exists ( 'Mobile_Detect' ) ) {
     require FCA_EOI_PLUGIN_DIR . 'includes/classes/Mobile-Detect/Mobile_Detect.php';
 }
 
+/* ADD ANIMATION CSS TO FRONT-END AND ADMIN PAGES WHEN ENABLED */
+add_action( 'fca_eoi_display_lightbox', 'fca_eoi_load_animation_script_popup' );
+add_action( 'fca_eoi_render_animation_meta_box', 'fca_eoi_load_animation_script_popup' );
+
+$fca_eoi_animation_enabled = false; //ONLY ENQUEUE WHEN ITS TURNED ON
+
+function fca_eoi_load_animation_script_popup() {
+	global $fca_eoi_animation_enabled;
+	if ( $fca_eoi_animation_enabled ) {
+		wp_enqueue_style( 'fca_eoi_powerups_animate', plugin_dir_url( __FILE__ ) . 'assets/vendor/animate/animate.css' );
+	}
+}
+
 
 if( ! class_exists( 'DhEasyOptIns' ) ) {
 class DhEasyOptIns {
 
-    var $ver = '1.3.9';
+    var $ver = '1.4.0';
     var $distro = '';
     var $shortcode = 'optin-cat';
     var $shortcode_aliases = array(
@@ -239,7 +262,7 @@ if ( ! is_plugin_active( plugin_basename( __FILE__ ) ) ) {
 
     function fca_eoi_activation() {
         $plugins = get_plugins();
-
+		
         // Fail to activate the plugin if other Optin Cat plugins are already active
         foreach ( $plugins as $file => $plugin ) {
             if ( stripos( $plugin['PluginURI'], 'fatcatapps.com/optincat' ) !== false && is_plugin_active( $file ) ) {

@@ -10,7 +10,7 @@ function powerup_custom_css( $settings ) {
 			),
 			'page' => 'eoi_powerups',
 			'title' => __( 'Custom CSS' ),
-			'description' => sprintf( '<p class="description eoi_powerup_description">%s</p>', __( 'Adds a setting that lets you add custom CSS to your opt-in box to the Easy Opt-ins editor.' ) ),
+			'description' => sprintf( '<p class="description eoi_powerup_description">%s</p>', __( 'Adds a setting that lets you add custom CSS to your opt-in box to the Optin Cat form editor.' ) ),
 		)
 	) );
 

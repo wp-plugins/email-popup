@@ -148,8 +148,9 @@ class EasyOptInsUpgrade {
                             <li><div class="dashicons dashicons-yes"></div> Smart Popup Targeting</li>
                             <li><div class="dashicons dashicons-yes"></div> More Layouts</li>
                             <li><div class="dashicons dashicons-yes"></div> Two-Step Optins</li>
-                            <li><div class="dashicons dashicons-yes"></div> Content Upgrades</li>
-                            <li><div class="dashicons dashicons-yes"></div> Exit Intervention</li>
+                            <li><div class="dashicons dashicons-yes"></div> Optin Bait Delivery</li>
+                            <li><div class="dashicons dashicons-yes"></div> Exit Intervention Popups</li>
+                            <li><div class="dashicons dashicons-yes"></div> Attention Grabbing Popup Effects</li>
                             <li><div class="dashicons dashicons-yes"></div> Priority Email Support</li>
                             <?php if ( $is_mailchimp ): ?>
                                 <li><div class="dashicons dashicons-yes"></div> Mailchimp Single Optin</li>
@@ -202,7 +203,7 @@ class EasyOptInsUpgrade {
                     if ( $power_ups_span && $power_ups_span.length > 0 ) {
                         $power_ups_span.parent().next( '.inside' ).append( <?php echo json_encode( '<br/>' . str_replace(
                             array( '__class__', '__text__' ),
-                            array( 'fca_eoi_upgrade_bar fca_eoi_upgrade_bar_inner', 'Upgrade to Premium and get access to the Content Upgrades Powerup' ),
+                            array( 'fca_eoi_upgrade_bar fca_eoi_upgrade_bar_inner', 'Upgrade to Premium and get access to the Optin Bait Delivery Powerup' ),
                             $template
                         ) ) ?> );
                     }

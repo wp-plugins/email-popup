@@ -6,8 +6,8 @@ Tags: popup, email popup, wordpress popup, wordpress popup plugin, list building
 Author URI: https://fatcatapps.com/
 Plugin URI: https://fatcatapps.com/optincat/upgrade/p?utm_campaign=description%2Bcta&utm_source=https%3A%2F%2Fwordpress.org%2Fplugins%2Femail-popup%2F&utm_medium=referral
 Requires at least: 3.9.1
-Tested up to: 4.3
-Stable tag: 1.3.9
+Tested up to: 4.3.1
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -91,7 +91,7 @@ When it comes to features, here’s what you’ll find in the premium version of
 > + Mobile Popups: Show your popup on mobile devices <br /><br />
 > + Two Step Optin Feature: Trigger a Popup Optin Form after the user clicks on a hyperlink.<br /><br />
 > + Priority Email Support: Responses to your inquiries on Email Popup for Optin Cat will be handled before those of free users<br /><br />
-> + Content Upgrades: Send optin baits & content upgrades straight from your WordPress backend.<br /><br />
+> + Optin Bait Delivery: Send Optin Baits straight from WordPress.<br /><br />
 > + Exit Intervention: Display popups when the user is about to leave your site.<br />
 >
 > [Want to learn more about the premium version of Email Popup by Optin Cat? Visit the following link to see all that the premium version of our popup plugin has to offer>>](https://fatcatapps.com/optincat/upgrade/p?utm_campaign=description%2Bcta&utm_source=https%3A%2F%2Fwordpress.org%2Fplugins%2Femail-popup%2F&utm_medium=referral)
@@ -199,6 +199,11 @@ Ready for some popup magic? Here’s how you install Email Popup by Optin Cat:
 3. In your sidebar, find our popup plugin and select 'Optin Cat -> Add New' to create a new popup
  
 == Changelog ==
+
+= Email Popup by Optin Cat 1.4.0 =
+* Changed: Updated layout selection screen to be responsive and look more like Wordpress theme select screen.
+* Fixed: Hide Optin Cat shortcode insert button and dashboard widget from users with privileges below editor (subscriber and author).
+* Fixed: Logged in users no longer count towards impressions on forms.
 
 = Email Popup by Optin Cat 1.3.9 =
 * Fixed: A bug in our popup targeting engine caused the "display once per month" criteria to not work as expected in some cases, which kinda defeated the purpose of our fancy targeting engine.

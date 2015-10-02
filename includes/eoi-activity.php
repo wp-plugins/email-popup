@@ -94,7 +94,12 @@ class EasyOptInsActivity {
 		if ( get_post($form_id) ) {
 			$robot_detector = new RobotDetector();
 			if ( ! $robot_detector->is_robot() ) {
-				$this->add_impression( $form_id );
+				if ( is_user_logged_in() ) {
+					/* USER IS LOGGED IN , DON'T COUNT AS IMPRESSION */
+				}else {
+					$this->add_impression( $form_id );
+				}
+				
 			}
 		}
 

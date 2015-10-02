@@ -17,7 +17,7 @@ jQuery( document ).ready( function( $ ) {
 		.filter( function() { return fca_eoi_new_post; } )
 		.val( 'lightbox_1' )
 	;
-
+	
 	// Helpers
 	var providers_fieldsets_selector = '[id^=fca_eoi_fieldset_form_][id$=_integration]';
 
@@ -90,6 +90,7 @@ jQuery( document ).ready( function( $ ) {
 			$( '#fca_eoi_meta_box_powerups' ).show();
 		}
 	} );
+	
 
 	// Use smaller tabs for layout types
 	$( 'a[href^="#layouts_type_"]' ).click( function( e ) {
@@ -107,7 +108,7 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Show the mini-tab containing the current layout
-	$( 'a[href^="#layouts_type_' + fca_eoi_layout_type( fca_eoi_current_layout_id() ) + '"]' ).click();
+    $( 'a[href^="#layouts_type_' + fca_eoi_layout_type( fca_eoi_current_layout_id() ) + '"]' ).click();
 
 	// Hide Tabs
 	$( '#fca_eoi_meta_box_nav' ).hide();
@@ -132,6 +133,38 @@ jQuery( document ).ready( function( $ ) {
 		$( '#fca_eoi_publish_widget,#fca_eoi_publish_postbox,#fca_eoi_publish_lightbox').hide();
 		$( '#fca_eoi_publish_' + fca_eoi_layout_type( fca_eoi_current_layout_id() ) ).show();
 		
+	
+		//Display change text when you pick a new animation
+		
+		$( '#fca_eoi_animations' ).select2().on("select2-open", function() {
+			$( "#fca_eoi_animations_choice_text" ).removeClass();
+		});
+		
+		$( '#fca_eoi_animations' ).select2().on("select2-close", function() {
+			if (this.value != 'None') {
+			
+				$( "#fca_eoi_animations_choice_text" ).addClass( 'animated ' + this.value );
+				$( "#fca_eoi_animations_choice_text" ).text( "Solid choice!  You've selected a great entrance effect.");
+				
+			}else{
+			
+				$( "#fca_eoi_animations_choice_text" ).text('');
+			}
+		});
+			
+		if (document.getElementById("fca_eoi_show_animation_checkbox")) {
+			if (!($('#fca_eoi_show_animation_checkbox')[0].checked)) {
+				$( '#fca_eoi_animations_div' ).hide();
+			}
+		}
+		
+		// Show/hide animations checkbox
+		
+		
+		$('#fca_eoi_show_animation_checkbox').click(function () {
+			$("#fca_eoi_animations_div").toggle(this.checked);
+		});
+		
 		// Go back to the build tab, unless we are in a new form and the switcher was not clicked
 		if( fca_eoi_new_post && ! layout_button_clicked ) {
 			layout_button_clicked = true;
@@ -139,6 +172,23 @@ jQuery( document ).ready( function( $ ) {
 		} else {
 			$( 'a[href="#fca_eoi_meta_box_build"]' ).click();
 		}
+		
+				
+		//Hide the animations unless the lightbox/popup layout type is selected
+		if ( layout_id.indexOf('lightbox') != -1 ) {
+			$( '.eoi-custom-animation-form' ).show();
+		}else {
+			//if there are no others, hide the whole box fca_eoi_meta_box_powerups
+			var children = $( '#fca_eoi_meta_box_powerups' ).children(".inside").children("div");
+			if (children.length == 1)  {
+				$('#fca_eoi_meta_box_powerups').hide();
+			}else {
+				$( '.eoi-custom-animation-form' ).hide();
+			}
+		}
+
+		
+		
 	} );
 
 	// Handle "Switch layout button"
@@ -721,7 +771,11 @@ jQuery( document ).ready( function( $ ) {
 
 	// Duplicate the Save button and add to the button of the page
 	$( '#submitdiv' ).clone( true ).appendTo( '#normal-sortables' );
-
+	
+	// Add the Save button to each item
+	$('.fca_eoi_layout_info').append( "<input type='submit' name='publish' id='publish' class='button button-primary button-large' value='Select Layout'>" );
+	
+	
 	// Autoselect
 	$(".autoselect")
 		.bind( 'click focus mouseenter', function() { $( this ).select() } )

@@ -30,6 +30,7 @@ class EasyOptInsPostTypes {
 
 		// Dashboard widget
 		add_action( 'wp_dashboard_setup', array( $this, 'dashboard_setup' ) );
+		
 
 		// Add provider object and post settings to settings
 		add_action( 'init', array( $this, 'more_settings' ) );
@@ -162,7 +163,7 @@ class EasyOptInsPostTypes {
 			'rewrite' => array(
 				'slug' => 'easy-opt-ins',
 			) ,
-			'capability_type' => 'post',
+			'capability_type' => 'page',
 			'has_archive' => false,
 			'hierarchical' => false,
 			'menu_position' => 105,
@@ -438,14 +439,14 @@ class EasyOptInsPostTypes {
 		global $post;
 
 		$layouts_types_labels = array(
-			'widget' => 'Sidebar Widgets',
-			'postbox' => 'Post Boxes',
 			'lightbox' => 'Popups',
+			'postbox' => 'Post Boxes',
+			'widget' => 'Sidebar Widgets',
 		);
 
 		$fca_eoi = get_post_meta( $post->ID, 'fca_eoi', true );
 
-		echo '<h2>' . __( 'Layouts' ) . '</h2>';
+		echo '<h2>' . __( 'Choose a Layout' ) . '</h2>';
 		echo '<script id="fca_eoi_texts" type="application/json">{ "headline_copy": "Headline Copy", "description_copy": "Description Copy", "name_placeholder": "Name Placeholder", "email_placeholder": "Email Placeholder", "button_copy": "Button Copy", "privacy_copy": "Privacy Copy" }</script>';
 			
 		// Build the layouts array
@@ -477,10 +478,11 @@ class EasyOptInsPostTypes {
 			);
 		}
 		echo '</ul>';
-
+	
 		// Layout types
 		foreach ( $layouts_types as $layout_type ) {
-			echo '<div id="layouts_type_' . $layout_type . '">';
+			echo '<div class="fca_eoi_accordion_tab" id="layouts_type_' . $layout_type . '">';
+			
 			foreach ( glob( $this->settings[ 'plugin_dir' ] . "layouts/$layout_type/*", GLOB_ONLYDIR ) as $layout_path ) {
 				// Grab layout details
 				$layout_id = basename( $layout_path );
@@ -577,12 +579,11 @@ class EasyOptInsPostTypes {
 				$layouts[ $layout_id ] = $layout;
 				// Output the layout image and hidden template
 				$layout_output_tpl = '
-					<div
-						class="fca_eoi_layout has-tip"
-						data-layout-id=":id" data-layout-type=":type"				
-					>
+					<div class="fca_eoi_layout has-tip" data-layout-id=":id" data-layout-type=":type">	
 						<img src=":src" />
+						<div class="fca_eoi_layout_info">
 						<h3>:name</h3>
+						</div>
 						<script id="fca_eoi_tpl_:id" type="x-tmpl-mustache">:template</script>
 						<script id="fca_eoi_editables_:id" type="application/json">:editables</script>
 						<script id="fca_eoi_texts_:id" type="application/json">:texts</script>
@@ -895,7 +896,7 @@ class EasyOptInsPostTypes {
 		echo '</div>';
 
 		// Lightboxes
-
+		
 		switch ( $this->settings['distribution'] ) {
 		case 'free':
 			$conditions_options = array(
@@ -913,9 +914,9 @@ class EasyOptInsPostTypes {
 			);
 			break;
 		}
-
+		
 		$fca_eoi[ 'publish_lightbox' ] = K::get_var( 'publish_lightbox', $fca_eoi, array() );
-		echo '<div id ="fca_eoi_publish_lightbox">';
+		echo "<div id ='fca_eoi_publish_lightbox'>";
 
 		if ( 'premium' === $this->settings[ 'distribution' ] ) {
 			K::input( 'fca_eoi[publish_lightbox_mode]'
@@ -1535,12 +1536,19 @@ class EasyOptInsPostTypes {
 
 		// Save meta data
 		delete_post_meta( $post->ID, 'fca_eoi' );
+
+		$animation  = isset($_POST['fca_eoi_animations']) ? $_POST['fca_eoi_animations'] : '';
+		$animationValue = $_POST['fca_eoi_show_animation_checkbox'];
+		if ($animationValue != 'on') {
+			$animation = '';
+		}
+		
 		if( $meta = K::get_var( 'fca_eoi', $_POST ) ) {
 			// Add provider if missing (happens on free distros where there is only one provider)
 			if( ! K::get_var( 'provider', $meta ) ) {
 				$meta[ 'provider' ] = $this->settings[ 'provider' ];
 			}
-
+			
 			// Keep only the current providers settings, Remove all [provider]_[setting] not belonging to the current provider
 			$provider = K::get_var( 'provider', $meta );
 			if( $provider ) {
@@ -1586,10 +1594,17 @@ class EasyOptInsPostTypes {
 			if ( function_exists( $on_save_function ) ) {
 				$meta = $on_save_function( $meta );
 			}
+			
+		
 
 			add_post_meta( $post->ID, 'fca_eoi', $meta );
 			add_post_meta( $post->ID, 'fca_eoi_layout', $meta[ 'layout' ] );
 			add_post_meta( $post->ID, 'fca_eoi_provider', $meta[ 'provider' ] );
+		
+			delete_post_meta( $post->ID, 'fca_eoi_animation' );
+			add_post_meta( $post->ID, 'fca_eoi_animation', $animation );
+			
+			
 		}
 	}
 
@@ -1608,7 +1623,9 @@ class EasyOptInsPostTypes {
 		$protocol = is_ssl() ? 'https' : 'http';
 		$provider = $this->settings[ 'provider' ];
 		$providers_available = array_keys( $this->settings[ 'providers' ] );
-
+		
+		
+		
 		if ( ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'eoi_powerups' ) || has_action( 'fca_eoi_powerups' ) ) {
 			wp_enqueue_style( 'fca_eoi_powerups', $this->settings['plugin_url'] . '/assets/powerups/fca_eoi_powerups.css' );
 		}
@@ -2280,6 +2297,7 @@ class EasyOptInsPostTypes {
 	}
 
 	public function show_lightbox() {
+		
 		// Do not show lightbox on mobile if this is the free distribution
 		if ( $this->settings[ 'distribution' ] === 'free' ) {
 			$mobile_detect = new Mobile_Detect;
@@ -2287,7 +2305,7 @@ class EasyOptInsPostTypes {
 				return;
 			}
 		}
-
+		
 		// Get lightboxes
 		$lightboxes = get_posts( array(
 			'post_type' => 'easy-opt-ins',
@@ -2323,7 +2341,7 @@ class EasyOptInsPostTypes {
 				$traditional_ids[] = $lightbox->ID;
 			}
 		}
-
+		
 		$this->display_traditional_popups($traditional_ids, $this->display_two_step_popups($two_step_ids));
 	}
 
@@ -2333,7 +2351,8 @@ class EasyOptInsPostTypes {
 		if ( empty( $lightbox_ids ) ) {
 			return false;
 		}
-
+		do_action( 'fca_eoi_display_lightbox' );
+		
 		foreach ( $lightbox_ids as $lightbox_id ) {
 			$this->prepare_lightbox( $lightbox_id );
 		}
@@ -2358,7 +2377,7 @@ class EasyOptInsPostTypes {
 		if ( empty( $lightbox_ids ) ) {
 			return false;
 		}
-
+	
 		?>
 		<script type="text/javascript" src="<?php echo $this->settings['plugin_url'] . '/' . $this->targeting_cat_path ?>"></script>
 		<script>
@@ -2457,6 +2476,13 @@ class EasyOptInsPostTypes {
 
 						<?php echo $v['load_script'] ?>( <?php echo $v['vendor_url'] ?> + 'featherlight/release/featherlight.min.js', <?php echo $v['done'] ?> );
 						<?php echo $v['load_style'] ?>( <?php echo $v['vendor_url'] ?> + 'featherlight/release/featherlight.min.css', <?php echo $v['done'] ?> );
+						
+						<?php global $fca_eoi_animation_enabled;
+						
+						
+						if ( $fca_eoi_animation_enabled ) {
+										
+						echo $v['load_style'] . "(" . $v['vendor_url'] . "+ 'animate/animate.css'," . $v['done'] . ');'; } ?> 
 					}
 
 				<?php } ?>
@@ -2507,12 +2533,48 @@ class EasyOptInsPostTypes {
 						}
 					} );
 				} );
-
-				$( '.fca_eoi_featherlight' ).live( 'click', function( e ) {
-					if ( $( e.target ).is( '.fca_eoi_featherlight-inner, .fca_eoi_form_content' ) ) {
-						$( '.fca_eoi_layout_popup_close' ).click();
+				
+				var lightbox_ids_Count = <?php echo count ($lightbox_ids) ?>;
+				var currentLightBoxCount = 0;
+				var totalAddedLightboxes = 0;
+								
+				function waitUntilPopupsAreMade() {
+					
+					if( totalAddedLightboxes < lightbox_ids_Count  ) {
+					
+						if (document.getElementsByClassName("fca_eoi_featherlight").length > currentLightBoxCount) {
+							
+							totalAddedLightboxes++;
+							currentLightBoxCount = document.getElementsByClassName("fca_eoi_featherlight").length;
+							attachDeleteButtons();
+							window.setTimeout(waitUntilPopupsAreMade, 200);		
+						}else {
+							
+							currentLightBoxCount = document.getElementsByClassName("fca_eoi_featherlight").length;
+							window.setTimeout(waitUntilPopupsAreMade, 200);		
+						}
+					
+					} else {
+						
+						attachDeleteButtons();
 					}
-				} );
+				}
+				if (lightbox_ids_Count > 1) {
+					waitUntilPopupsAreMade();
+				}
+				
+				function attachDeleteButtons() {
+					  	myNodes = document.getElementsByClassName("fca_eoi_layout_popup_close");
+						
+						for (var i=0; i<myNodes.length; i++) {
+								myNodes[i].onclick =  function(e) {
+								$(this).parents(".fca_eoi_featherlight").hide();					
+							};
+						
+						}
+				}
+				
+			
 			} );
 
 			<?php
@@ -2542,14 +2604,19 @@ class EasyOptInsPostTypes {
 
 	public function prepare_lightbox( $id ) {
 		$id = (int) $id;
-
+		
+		global $post;
+		
+		$animation = get_post_meta( $id, 'fca_eoi_animation', true );
+		
+				
 		$featherlight_class = EasyOptInsLayout::uses_new_css() ? 'fca_eoi_featherlight' : 'featherlight';
 		$content = do_shortcode( "[easy-opt-in id=$id]" );
 
 		?>
 		<div style="display:none">
 			<style scoped>.<?php echo $featherlight_class ?>-content { background: transparent !important; }</style>
-			<div id="fca_eoi_lightbox_<?php echo $id ?>"><?php echo $content ?></div>
+			<div class=<?php echo "'animated $animation'" ?> id="fca_eoi_lightbox_<?php echo $id ?>"><?php echo $content ?></div>
 		</div>
 		<?php
 	}
