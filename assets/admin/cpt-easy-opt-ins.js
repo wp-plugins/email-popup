@@ -453,6 +453,17 @@ jQuery( document ).ready( function( $ ) {
 	// We should debounce, but we get errors (unsolved yet)
 	$( 'input, select, textarea', '#fca_eoi_settings' )
 		.bind( 'change keyup', debounce( function() {
+		
+			// Update select boxes
+			$( 'select[data-selected]' ).each( function() {
+
+				var $this = $( this );
+				var selected = $( this ).data( 'selected' );
+
+				if ( selected ) {
+					$( 'option[value=' + selected + ']', $this ).attr( 'selected', 'selected' );
+				}
+			} );
 
 			// var start_time = new Date().getMilliseconds();
 			var $field, layout_editables_json, layout_id, output, template_html, view;
@@ -502,17 +513,6 @@ jQuery( document ).ready( function( $ ) {
 			output_html += '</style>';
 
 			$( '#fca_eoi_preview' ).html( output_html );
-
-			// Update select boxes
-			$( 'select[data-selected]' ).each( function() {
-
-				var $this = $( this );
-				var selected = $( this ).data( 'selected' );
-
-				if ( selected ) {
-					$( 'option[value=' + selected + ']', $this ).attr( 'selected', 'selected' );
-				}
-			} );
 
 			error_tooltip.update_for_current_section( true );
 
@@ -821,6 +821,15 @@ jQuery( document ).ready( function( $ ) {
 		} )
 		.change()
 	;
+	
+	// Add default error text if it is empty
+	if ( $( '[name="fca_eoi[error_text_field_required]"]' ).val() === '' ) {
+		$( '[name="fca_eoi[error_text_field_required]"]' ).val("Error: This field is required.");
+	}
+	
+	if ( $( '[name="fca_eoi[error_text_invalid_email]"]' ).val() === '' ) {
+		$( '[name="fca_eoi[error_text_invalid_email]"]' ).val("Error: Please enter a valid email address. For example \"max@domain.com\".");
+	}	
 
 	// Debounce
 	function debounce( fn, threshold ) {

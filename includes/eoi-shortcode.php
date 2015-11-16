@@ -280,14 +280,9 @@ class EasyOptInsShortcodes {
 
 		wp_enqueue_script( 'featherlight', $this->settings[ 'plugin_url' ] . '/assets/vendor/featherlight/release/featherlight.min.js' );
 		wp_enqueue_style( 'featherlight', $this->settings[ 'plugin_url' ] . '/assets/vendor/featherlight/release/featherlight.min.css' );
-
-		wp_localize_script(
-			'fca_eoi'
-			, 'fca_eoi'
-			, array_merge( $this->settings['error_text'], array(
-				'ajax_url' => admin_url( 'admin-ajax.php' )
-			) )
-		);
+		
+			
+		wp_localize_script( 'fca_eoi', 'fca_eoi', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 	}
 
 	public function shortcode_content( $atts ) {
@@ -343,7 +338,10 @@ class EasyOptInsShortcodes {
 				'">';
 			$form_wrapper_end = '</div>';
 		}
-
+		
+		$errorTexts = fca_eoi_get_error_texts($form_id);
+				
+			
 		// Fill template with our formatting stuff
 		$template = str_replace(
 			array(
@@ -397,7 +395,10 @@ class EasyOptInsShortcodes {
 				EasyOptInsLayout::uses_new_css()
 					? '{{#show_fatcatapps_link}}<div class="fca_eoi_layout_fatcatapps_link_wrapper fca_eoi_form_text_element"><a href="http://fatcatapps.com/eoi" target="_blank">Powered by Optin Cat</a></div>{{/show_fatcatapps_link}}'
 					: '{{#show_fatcatapps_link}}<p class="fca_eoi_' . $layout_id . '_fatcatapps_link_wrapper"><a href="http://fatcatapps.com/eoi" target="_blank">Powered by Optin Cat</a></p>{{/show_fatcatapps_link}}',
-				'<input type="hidden" name="id" value="' . $form_id . '"><input type="hidden" name="fca_eoi" value="1"></form></div>' . $form_wrapper_end,
+				'<input type="hidden" name="id" value="' . $form_id . '"><input type="hidden" name="fca_eoi" value="1">
+				 <input type="hidden" name="fca_eoi_error_texts_email" class="fca_eoi_error_texts_email" value="' . htmlspecialchars ($errorTexts['invalid_email']) . '">
+				<input type="hidden" name="fca_eoi_error_texts_required" class="fca_eoi_error_texts_required" value="' . htmlspecialchars ($errorTexts['field_required']) . '">
+		</form></div>' . $form_wrapper_end,
 			),
 			$template
 		);
@@ -422,26 +423,7 @@ class EasyOptInsShortcodes {
 			, $output
 			, $fca_eoi_meta
 		);
-
-		$error_text = '';
-
-		foreach ( $fca_eoi_meta as $key => $value ) {
-			if ( strpos( $key, 'error_text_' ) === 0 ) {
-				$text = substr( $key, 11 );
-				$error_text .= 'fca_eoi[' . json_encode($text) . '] = ' . json_encode($value) . ';';
-			}
-		}
-
-		if ( ! empty( $error_text ) ) {
-			$output .=
-				'<script>' .
-					'if ( typeof fca_eoi === "undefined" ) {' .
-						'fca_eoi = {};' .
-					'}' .
-					$error_text .
-				'</script>';
-		}
-
+		
 		$prerequisites = $this->get_prerequisites_for_form( $form_id );
 		$prerequisites = str_replace('<style', '<style scoped', $prerequisites);
 

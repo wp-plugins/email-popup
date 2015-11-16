@@ -2,6 +2,7 @@
 	background: #DE607C !important;
 	border: #DE607C !important;
 	margin-top: 10px;
+	z-index: 9999999999 !important;
 }
 .fca_eoi_lightbox {
 	width: 650px;

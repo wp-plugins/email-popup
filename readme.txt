@@ -6,8 +6,8 @@ Tags: popup, email popup, wordpress popup, wordpress popup plugin, list building
 Author URI: https://fatcatapps.com/
 Plugin URI: https://fatcatapps.com/optincat/upgrade/p?utm_campaign=description%2Bcta&utm_source=https%3A%2F%2Fwordpress.org%2Fplugins%2Femail-popup%2F&utm_medium=referral
 Requires at least: 3.9.1
-Tested up to: 4.3.1
-Stable tag: 1.4.0
+Tested up to: 4.4
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -199,6 +199,13 @@ Ready for some popup magic? Here’s how you install Email Popup by Optin Cat:
 3. In your sidebar, find our popup plugin and select 'Optin Cat -> Add New' to create a new popup
  
 == Changelog ==
+
+= Email Popup by Optin Cat 1.4.2 =
+* Fixed a bug that stopped the optin form validation to work and/or caused the custom Error Text to not be displayed correctly in some cases.
+
+= Email Popup by Optin Cat 1.4.1 =
+* Bugfix: Fixed a conflict with the Beaver Builder plugin
+* Various other small bugfixes & improvements
 
 = Email Popup by Optin Cat 1.4.0 =
 * Changed: Updated layout selection screen to be responsive and look more like Wordpress theme select screen.

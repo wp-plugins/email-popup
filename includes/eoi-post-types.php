@@ -76,7 +76,9 @@ class EasyOptInsPostTypes {
 
 		add_filter( 'template_redirect', array( $this, 'parse_tc_condition_request' ), 1 );
 
-		add_filter( 'the_content', array( $this, 'scan_for_shortcodes' ) );
+		//ADD ACTIONS TO GET THE ENTIRE PAGE OUTPUT IN BUFFER
+		add_action('wp_head', array( $this, 'fca_eoi_buffer_start' ));
+		add_action('wp_footer', array( $this, 'fca_eoi_buffer_end' ));
 
 		add_filter( 'init', array( $this, 'request_prepare_lightbox' ) );
 
@@ -99,7 +101,11 @@ class EasyOptInsPostTypes {
 			new  EasyOptInsLicense( $this->settings );
 		}
 	}
-
+	
+	function fca_eoi_buffer_start() { ob_start(array( $this, 'scan_for_shortcodes' )); }
+	function fca_eoi_buffer_end() { ob_end_flush(); }
+	
+	
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'jquery' );
 	}
@@ -1595,7 +1601,7 @@ class EasyOptInsPostTypes {
 				$meta = $on_save_function( $meta );
 			}
 			
-		
+			
 
 			add_post_meta( $post->ID, 'fca_eoi', $meta );
 			add_post_meta( $post->ID, 'fca_eoi_layout', $meta[ 'layout' ] );
@@ -2238,6 +2244,13 @@ class EasyOptInsPostTypes {
 			foreach ( $post_taxonomies as $t ) {
 				$post_cond[] = $post_type . ':' . $t->term_id;
 			}
+		} else {
+			//FIX FOR NOT DISPLAYING ON BLOG PAGE
+		
+			if ( is_home() ) {
+				$post_cond[] = '#' . get_option('page_for_posts');
+			}
+		
 		}
 
 		$intersect = array_intersect( $values, $post_cond );
@@ -2386,11 +2399,6 @@ class EasyOptInsPostTypes {
 					fca_eoi = {};
 				}
 
-				var error_text = <?php echo json_encode( $this->settings['error_text'] ); ?>;
-				Object.keys( error_text ).forEach( function( key ) {
-					fca_eoi[ key ] = error_text[ key ];
-				} );
-
 				fca_eoi.ajax_url = <?php echo json_encode( admin_url( 'admin-ajax.php' ) ) ?>;
 			})();
 
@@ -2477,10 +2485,18 @@ class EasyOptInsPostTypes {
 						<?php echo $v['load_script'] ?>( <?php echo $v['vendor_url'] ?> + 'featherlight/release/featherlight.min.js', <?php echo $v['done'] ?> );
 						<?php echo $v['load_style'] ?>( <?php echo $v['vendor_url'] ?> + 'featherlight/release/featherlight.min.css', <?php echo $v['done'] ?> );
 						
-						<?php global $fca_eoi_animation_enabled;
+						<?php 
 						
+						$loadAnim = false;
+						forEach ($lightbox_ids as $id) {
+							$animation = get_post_meta( $id, 'fca_eoi_animation', true );
+							if ($animation != '') {
+								$loadAnim = true;
+								break;
+							}
+						}
 						
-						if ( $fca_eoi_animation_enabled ) {
+						if ( $loadAnim ) {
 										
 						echo $v['load_style'] . "(" . $v['vendor_url'] . "+ 'animate/animate.css'," . $v['done'] . ');'; } ?> 
 					}

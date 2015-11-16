@@ -4,7 +4,7 @@
     Plugin URI: https://fatcatapps.com/optincat
     Description: Email Popup By Optin Cat WordPress Lets You Convert More Blog Viisots Into Email Subscribers. Set It Up In 2 Minutes.
     Author: Fatcat Apps
-    Version: 1.4.0
+    Version: 1.4.2
     Author URI: https://fatcatapps.com/
 */
 
@@ -72,11 +72,33 @@ function fca_eoi_load_animation_script_popup() {
 	}
 }
 
+function fca_eoi_get_error_texts($id) {
+		
+		$post_meta = get_post_meta( $id , 'fca_eoi', true );
+		$errorTexts = array(
+            'field_required' => $post_meta[ 'error_text_field_required' ],
+            'invalid_email' => $post_meta[ 'error_text_invalid_email' ],
+        );
+		
+		if (!empty($errorTexts['field_required']) AND  !empty($errorTexts['invalid_email'])) {
+			return array(
+				'field_required' => $errorTexts['field_required'],
+				'invalid_email' => $errorTexts['invalid_email'],
+			);
+		
+		}else{
+		
+			return array(
+				'field_required' => 'Error: This field is required.',
+				'invalid_email' => "Error: Please enter a valid email address. For example \"max@domain.com\"."
+			);
+		}
+}
 
 if( ! class_exists( 'DhEasyOptIns' ) ) {
 class DhEasyOptIns {
 
-    var $ver = '1.4.0';
+    var $ver = '1.4.2';
     var $distro = '';
     var $shortcode = 'optin-cat';
     var $shortcode_aliases = array(
@@ -238,12 +260,8 @@ class DhEasyOptIns {
             'menu_title' => __( 'Power Ups' ),
             'parent' => 'edit.php?post_type=easy-opt-ins',
         ) ) );
-
-        $this->settings['error_text'] = array(
-            'field_required' => 'Error: This field is required.',
-            'invalid_email' => "Error: Please enter a valid email address. For example \"max@domain.com\"."
-        );
-    }
+	
+	}
 }
 }
 
